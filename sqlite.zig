@@ -1231,9 +1231,9 @@ pub fn Iterator(comptime Type: type) type {
                             const size: usize = @intCast(c.sqlite3_column_bytes(self.stmt, i));
 
                             if (arr.sentinel) |sentinel_ptr| {
-                                // An array with a sentinel need to be as big as the data, + 1 byte for the sentinel.
-                                if (size >= @as(usize, arr.len)) {
-                                    return error.ArrayTooSmall;
+                                // An array with a sentinel need to end with the sentinel
+                                if (size < @as(usize, arr.len)) {
+                                    return error.ArrayTooBig;
                                 }
 
                                 // Set the sentinel in the result at the correct position.
